@@ -35,16 +35,19 @@ def vigenere(alphabet, key, plaintext, mode='encrypt'):
     # return a string format, and remove the padding so that the return is consistent with input.
     return ''.join(c_arr[:(len(c_arr)-padding)])
 
-
+### ARGUMENTS
 alphabet = 'abcdefghijklmnopqrstuvwxyzåäö ,.'
 key = 'melons'
 plaintext = 'big bananas are best for eating, small bananas are best for cakes..'
 
+### RUN ALGORITHM
+print('PLAINTEXT: # ', plaintext, ' #')
 ciphertext = vigenere(alphabet, key, plaintext)
-print(ciphertext)
-
-recovered_plaintext = vigenere(alphabet, key, ciphertext, mode='decrypt')
-print(recovered_plaintext)
+print('Encrypting...')
+print('CIPHERTEXT: # ', ciphertext, ' #')
+print('Decrypting...')
+decrypted_text = vigenere(alphabet, key, ciphertext, mode='decrypt')
+print('DECRYPTED TEXT: # ', decrypted_text, ' #')
 
 # Unit Test:
-print('Algorithm works: ', recovered_plaintext == plaintext)
+print('Algorithm works: ', plaintext == decrypted_text)
