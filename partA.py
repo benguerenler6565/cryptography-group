@@ -1,3 +1,4 @@
+# coding=utf-8
 import numpy as np
 
 
@@ -35,10 +36,20 @@ def vigenere(alphabet, key, plaintext, mode='encrypt'):
     # return a string format, and remove the padding so that the return is consistent with input.
     return ''.join(c_arr[:(len(c_arr)-padding)])
 
+def checkUnsupportedChars(plaintxt):
+    #Convert the uppercase to lowercase for encryption
+    plainTextlower = plaintxt.lower()
+
+    #Delete Unsupported characters
+    plainTextlower = plainTextlower.translate(None,''.join(set(plainTextlower).difference(alphabet)))
+    return plainTextlower
+
+
 ### ARGUMENTS
 alphabet = 'abcdefghijklmnopqrstuvwxyzåäö ,.'
 key = 'melons'
 plaintext = 'texten måste ju vara på svenska, sa någon. vem det var kan jag inte svara på. nu ska jag visa er att jag kan måla upp en historia som blir lika innehållsrik som en historia som innehåller frågor, fast min historia kommer inte innehålla frågor... ni kommer förstå varför och hur jag gjorde det. men en magiker kan inte avslöja sina trick innan den uppträder, så ni får ta en sekund och luta er tillbaka, njut av showen. det var en gång en liten pojke som hette einar. nu vet jag att ni undrar vem einar är och varför jag tog upp honom. jo då ska ni veta en sak, och det är att ni inte kommer få veta det. tack för mig.'
+plaintext = checkUnsupportedChars(plaintext)
 
 ### RUN ALGORITHM
 print('PLAINTEXT: # ', plaintext, ' #')
