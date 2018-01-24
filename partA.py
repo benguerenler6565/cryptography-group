@@ -36,10 +36,20 @@ def vigenere(alphabet, key, plaintext, mode='encrypt'):
     # return a string format, and remove the padding so that the return is consistent with input.
     return ''.join(c_arr[:(len(c_arr)-padding)])
 
+def checkUnsupportedChars(plaintxt):
+    #Convert the uppercase to lowercase for encryption
+    plainTextlower = plaintxt.lower()
+
+    #Delete Unsupported characters
+    plainTextlower = plainTextlower.translate(None,''.join(set(plainTextlower).difference(alphabet)))
+    return plainTextlower
+
+
 ### ARGUMENTS
 alphabet = 'abcdefghijklmnopqrstuvwxyzåäö ,.'
 key = 'melons'
-plaintext = 'big bananas are best for eating, small bananas are best for cakes..'
+plaintext = 'Big Bananas Are best for eating, small bananas are best for cakes ~ @#.'
+plaintext = checkUnsupportedChars(plaintext)
 
 ### RUN ALGORITHM
 print('PLAINTEXT: # ', plaintext, ' #')
