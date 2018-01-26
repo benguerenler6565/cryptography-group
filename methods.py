@@ -52,6 +52,10 @@ def check_unsupported_chars(alphabet, inputtext):
 
 
 class Decipherer:
+    common_words = ['jag', 'det', 'är', 'du', 'inte', 'att', 'en', 'och', 'har', 'vi', 'på', 'för', 'han', 'vad', 'med',
+                    'mig', 'som', 'här', 'om', 'dig', 'var', 'den', 'så', 'till', 'kan', 'de', 'ni', 'ska', 'ett']
+    char_frequencies = []
+
     def __init__(self, ciphertext):
         self.ciphertext = ciphertext
         self.kasiski(2, 12, 20)
@@ -107,5 +111,30 @@ class Decipherer:
         # return the attributes to the class object, we take the estimate as the most frequently occurring factor > 1.
         self.keylength_analysis = Counter(factors_list)
         self.keylength_estimate = self.keylength_analysis.most_common(2)[1][0]
+
+    def decryption_verifier(self, plaintext_guess, calibration=3):
+        """
+        Function counts how many times the specified common words are detected in plaintext.
+        Returns True or False based on some metrics, for example if more than 3 of the common words are detected per 100
+        chars then the text is considered good.
+
+        Notes:
+            Other tests could be incorporated, such as the maximum number of the counter suggest one word is used a lot.
+
+        Args:
+            plaintext_guess (str): the text to verify whether it is deemed valid or junk
+            calibration (int, optional): controls the leniency of the test: defines words per 100 chars allows True.
+
+        Returns:
+            Boolean, Dict, Int: Validity, count by common word, and a total of the amount of discovered words.
+        """
+        counter = dict()
+        total = 0
+        for word in self.common_words:
+            counter.update({word: plaintext_guess.count(word)})
+            total += plaintext_guess.count(word)
+
+        boo = total > calibration * len(plaintext_guess) / 100
+        return boo, counter, total
 
 
