@@ -1,4 +1,4 @@
-from methods import vigenere, ALPHABET, Decipherer
+from methods import Encrypter, ALPHABET, Decipherer
 
 with open("vig_group3.plain", "r") as plaintext_file:
     plaintext = plaintext_file.read()
@@ -10,7 +10,7 @@ with open("vig_group3.crypto", "r") as ciphertext_file:
     ciphertext = ciphertext_file.read()
 
 # unit test of encryption / decryption
-recovered_text = vigenere(ALPHABET, key, ciphertext, mode='decrypt')
+recovered_text = Encrypter.vigenere(ALPHABET, key, ciphertext, mode='decrypt')
 print('Unit test: assert plaintext == recovered_text: ', recovered_text == plaintext)
 
 decipherer = Decipherer(ciphertext=ciphertext)
