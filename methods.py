@@ -62,9 +62,9 @@ class Decipherer(Encrypter):
 
     def __init__(self, ciphertext):
         self.ciphertext = ciphertext
-        self.kasiski(2, 12, 20)
+        self.kasiski(2, 12, 20, 16)
 
-    def kasiski(self, min_length, max_length, num_elements):
+    def kasiski(self, min_length, max_length, num_elements, max_keylength):
         """
         Function analyses the ciphertext, scanning for repeated elements and then derives the estimated keylength from
         the separation between them. The estimated keylength is the number greater than 1 with the highest count.
@@ -73,11 +73,17 @@ class Decipherer(Encrypter):
             min_length (int): the minimum length of an element to search for repetitions: recommended 2 to 3.
             max_length (int): the maximum length of an element to search for repetitions: recommended 8 to 12.
             num_elements (int): the number of discovered repeated elements to search through: recommended 20.
+            max_keylength (int): the maximum assumed characters in the key.
+
+        Notes:
+            This functions is not optimal. For example if the counters return: (3,12) (5,11) (15,8), then the key length
+            estimate could probably be assumed to be 15 as best guess since 3 and 5 both divide 15. But how to calibrate
+            these kinds of things are probably best done with neural networks. Here we take only highest score.
 
         Attributes:
             repeated_elements (list): a list of strings of the discovered repeated elements using above params.
             keylength_analysis (Counter): a counter object that returns the count of the possible keylength spectrums.
-            keylength_estimate (int): best guess for keylength.
+            keylength_estimate (array): ordered best guesses for keylength with numbers spanning [1, max_keylength]
         """
 
         # systematically cycle through the ciphertext adding elements to a list:
@@ -114,7 +120,18 @@ class Decipherer(Encrypter):
 
         # return the attributes to the class object, we take the estimate as the most frequently occurring factor > 1.
         self.keylength_analysis = Counter(factors_list)
-        self.keylength_estimate = self.keylength_analysis.most_common(2)[1][0]
+
+        most_common_keylengths = self.keylength_analysis.most_common()
+
+        keylength_estimate = list()
+        for tuple in most_common_keylengths:
+            if tuple[0] > max_keylength:
+                pass
+            else:
+                keylength_estimate.append(tuple[0])
+        undetected = set(list(range(1, max_keylength+1))).difference(set(keylength_estimate))
+        keylength_estimate.extend(undetected)
+        self.keylength_estimate = keylength_estimate
 
     def decryption_verifier(self, plaintext_guess, calibration=3):
         """
@@ -123,7 +140,9 @@ class Decipherer(Encrypter):
         chars then the text is considered good.
 
         Notes:
-            Other tests could be incorporated, such as the maximum number of the counter suggest one word is used a lot.
+            1) Other tests could be incorporated, such as the maximum number of the counter suggest one word is used a
+                lot.
+            2) If this code is slow and used frequently in brute force it may need a simpler test
 
         Args:
             plaintext_guess (str): the text to verify whether it is deemed valid or junk
