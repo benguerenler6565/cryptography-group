@@ -1,12 +1,12 @@
 from methods import Encrypter, ALPHABET, Decipherer
 
-with open("vig_group3.plain", "r") as plaintext_file:
+with open("crypto-files/vig_group3.plain", "r") as plaintext_file:
     plaintext = plaintext_file.read()
 
-with open("vig_group3.key", "r") as key_file:
+with open("crypto-files/vig_group3.key", "r") as key_file:
     key = key_file.read()
 
-with open("vig_group3.crypto", "r") as ciphertext_file:
+with open("crypto-files/vig_group3.crypto", "r") as ciphertext_file:
     ciphertext = ciphertext_file.read()
 
 # unit test of encryption / decryption
@@ -23,4 +23,4 @@ print('Decipherer.kasisiki() predicts the keylength of ciphertext to be: ', deci
 print('Decipherer.decryption_verifier() tested on the plaintext: ', decipherer.decryption_verifier(plaintext))
 print('Decipherer.decryption_verifier() tested on the ciphertext: ', decipherer.decryption_verifier(ciphertext))
 
-pass
+
