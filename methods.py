@@ -60,9 +60,20 @@ class Decipherer(Encrypter):
                     'mig', 'som', 'här', 'om', 'dig', 'var', 'den', 'så', 'till', 'kan', 'de', 'ni', 'ska', 'ett']
     char_frequencies = []
 
-    def __init__(self, ciphertext):
+    def __init__(self, ciphertext, user_input=False):
         self.ciphertext = ciphertext
         self.kasiski(2, 12, 20, 16)
+
+        # Added the following section to get user input on which order to test keylengths.
+        print("Kasiski analysis determines the best keylength guesses as: ", self.keylength_estimate)
+        print("This is derived from the following counts: ", self.keylength_analysis)
+        if user_input:
+            print("If you wish to override these keylength guesses please input a new array otherwise press enter..")
+            user_keylengths = input("New keylength array: ")
+            if user_keylengths is None:
+                pass
+            else:
+                self.keylength_estimate = user_keylengths
 
     def kasiski(self, min_length, max_length, num_elements, max_keylength):
         """
