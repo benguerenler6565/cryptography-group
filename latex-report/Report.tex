@@ -9,7 +9,7 @@
 \section*{Part B}
 
 The following are the results of our decryptions:
-% INSERT RESULTS HERE %
+% INSERT ONLY the KEYS - NOT the PLAINTEXTS %
 
 \section*{Part C}
 \subsection*{Extended Alphabets}
@@ -24,6 +24,28 @@ Whereas the entropy for a character \(X_{3*}\) three character set with probabil
 In this final example we would consider the unpredictability of any given character less than in the original case with two characters.
 
 \subsection*{Cipher Adjustments}
-\subsubsection*{(a)}
-This is not sensible
+\subsubsection*{(a) Reversed Plaintext Key}
+This is not sensible and does not represent a cryptosystem: either both the key and message will be known to the recipient, or both will be unknown to the recipient. In the first case the purpose of the message is made moot, and in the second case the recipient is no better positioned than any attacker. Incidentally the ciphertext will be symmetric so this pattern can also be observed.
+\subsubsection*{(b) Changed Operations}
+This is not sensible and does not represent a cryptosystem. A simple example shows that decryption does produce the original plaintext: let "D=3" be the plaintext, and "B=1" is the key, then the ciphertext is "C=1-3 mod M>3" and the recovered plaintext is "B=1-2 mod M>3", which is not the same as the original "D".
+\subsubsection*{(c) Transforming Plaintext}
+This defines a cryptosystem and is likely to be more secure that the Vigenere cipher of initial keylength, but not necessarily. It usually defines a Vigenere cipher of increased keylength, via a transformed key. For example consider a message encrypted with a keylength of three:
+\[ \begin{matrix}
+\text{Plaintext} & a & b & c & d & e \\
+\text{Key} & k_1 & k_2 & k_3 & k_1 & k_2 \\
+\text{Ciphertext} & a+k_1 & b+k_2 & c+k_3 & d +k_1 & e+k_2 \\
+\text{Transformed Plaintext} & a & b-a & c-b & d-c & e-d \\
+\text{Transformed Ciphertext} & a+k_1 & b-a+k_2 & c-b+k_3 & d-c+k_1 & e-d+k_2 \\
+\text{Transformed Key} & k_1 & b + k_1 + k_2 & c + k_1 + k_2 + k_3 & d+ k_1 + k_2 + k_3 +k_1& e + ...\\
+\end{matrix} \]
+Therefore this is equivalent to a traditional Vigenere cipher with transformed key = \{ \(K_1=k_1, K_2=k_1+k_2, K_3=k_1+k_2+k_3, K_4=k_1+k_2+k_3 + k_1, ... \) \}. For some value \(a\), \(a(k_1 + k_2 + k_3) \equiv 0 mod 3\) and the transformed key will revert to the traditional pattern. If \(a\) is 1 then the keylength is not increased so the cipher is no more secure than its original, this will be the result for a poorly chosen original key.
+A carefully chosen original key can result in a transformed keylength equal to \(L * M\) for \(L\) the original keylength and \(M\) the modulo of the alphabet. However the set of keys than can be generated in this way is far less than the abitrary set of keys of the same length.
+\par For example consider the alphabet \{ 0,1 \} and the set of original keys of length two, \{ 00, 01, 10, 11 \}. This will generate the transformed keys, \{ 00[00], 0110, 1100, 10[10] \}. But for arbitrary keys of length 4 there are 16 possible candidates, so although this is more difficult than the traditional Vigenere it is less difficult than a traditional Vigenere with an arbirary key taken from the same possible keylength space.
+
+
+
+\subsubsection*{(d) Autokey Cipher}
+The suggested addition here is known as the autokey cipher. It is considered more difficult to break than the traditional Vigenere cipher since the non-repeating key prevents analysis such as Kasiski based on repeating elements and frequency of letters. However, since the the plaintext forms part of the key common words, bigrams and trigrams can be successively attempted and deduced from the resulting decryptions.
+\subsubsection*{(e) Failed Autokey Cipher}
+This is not sensible. The autokey cipher works because the key is unknown. Using the ciphertext as a key leaves open the possibility of inserting it as a key and attempting to break the cipher. 
 \end{document}
